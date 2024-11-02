@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux"; // Import useSelector
-import { message } from "antd"; // Import message từ antd
+import { useSelector } from "react-redux";
+import { message } from "antd";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { getAllServices } from "../../services/serviceService";
@@ -16,7 +16,7 @@ function SampleNextArrow(props) {
       style={{
         ...style,
         display: "block",
-        background: "red",
+        backgroundColor: "#FF6F3C",
         borderRadius: "50%",
         width: "30px",
         height: "30px",
@@ -37,7 +37,7 @@ function SamplePrevArrow(props) {
       style={{
         ...style,
         display: "block",
-        background: "red",
+        backgroundColor: "#FF6F3C",
         borderRadius: "50%",
         width: "30px",
         height: "30px",
@@ -53,7 +53,7 @@ function SamplePrevArrow(props) {
 function SampleSlider() {
   const [services, setServices] = useState([]);
   const navigate = useNavigate();
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated); // Lấy trạng thái đăng nhập
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -90,12 +90,17 @@ function SampleSlider() {
     <div style={{ padding: "20px" }}>
       <Slider {...settings}>
         {services.map((service) => (
-          <div key={service._id} style={{ padding: "10px" }}>
+          <div
+            key={service._id}
+            style={{
+              padding: "0 15px", // Add horizontal padding between cards
+              boxSizing: "border-box",
+            }}
+          >
             <div
               style={{
                 backgroundColor: "#fff",
                 borderRadius: "15px",
-                boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
                 overflow: "hidden",
                 padding: "15px",
                 position: "relative",

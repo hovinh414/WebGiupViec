@@ -3,10 +3,10 @@ import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Service from "./pages/Service";
+import Header from "./component/Header/Header";
 import Hourly from "./pages/Hourly/index";
 import ListService from "./pages/ServiceList/ListService";
 import Employee from "./pages/Employee/Employee";
-import Header from "./pages/Header/Header";
 import Footer from "./pages/Footer/Footer";
 import ScrollToTop from "./utils/ScrollToTop"; // Import ScrollToTop component
 import { Provider } from "react-redux";
@@ -15,7 +15,7 @@ import BookingSuccess from "./pages/BookingSuccess/BookingSuccess";
 import WishList from "./pages/Wishlist";
 import Profile from "./pages/Profile";
 import BookingHistory from "./pages/BookingHistory";
-import ProtectedRoute from "./components/ProtectedRoute"; // Import ProtectedRoute
+import ProtectedRoute from "./component/ProtectedRoute"; // Import ProtectedRoute
 import FavoriteStaff from "./pages/FavoriteStaff";
 
 function App() {
@@ -24,7 +24,10 @@ function App() {
       <Router>
         <ScrollToTop /> {/* Đặt ngay sau <Router> */}
         <div className="App">
-          <Header />
+          <header>
+            <Header />
+          </header>
+
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />

@@ -24,6 +24,7 @@ const App = () => {
   const [selectedStaff, setSelectedStaff] = useState(null);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
+  const [cities, setCities] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedCityName, setSelectedCityName] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState(null);
@@ -37,11 +38,11 @@ const App = () => {
   const user = useSelector((state) => state.user.userInfo);
   const navigate = useNavigate();
 
-  const cities = [
-    { value: "01", label: "Hà Nội" },
-    { value: "48", label: "Đà Nẵng" },
-    { value: "79", label: "Hồ Chí Minh" },
-  ];
+  const cityOptions = {
+    "Hà Nội": { value: "01", label: "Hà Nội" },
+    "Đà Nẵng": { value: "48", label: "Đà Nẵng" },
+    "Thành phố Hồ Chí Minh": { value: "79", label: "Thành phố Hồ Chí Minh" },
+  };
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -55,10 +56,29 @@ const App = () => {
     };
     fetchServices();
   }, [serviceId]);
+  useEffect(() => {
+    if (selectedService) {
+      const selectedServiceData = services.find(
+        (service) => service._id === selectedService
+      );
+
+      if (selectedServiceData && selectedServiceData.address) {
+        const serviceCity = cityOptions[selectedServiceData.address];
+        if (serviceCity) {
+          setCities([serviceCity]);
+          setSelectedCity(serviceCity.value);
+          setSelectedCityName(serviceCity.label);
+        } else {
+          message.warning("Tỉnh của dịch vụ không khả dụng.");
+          setCities([]);
+          setSelectedCity(null);
+        }
+      }
+    }
+  }, [selectedService, services]);
 
   const handleServiceChange = (serviceId) => {
     setSelectedService(serviceId);
-    setSelectedStaff(null);
   };
 
   const handleFetchStaff = async () => {
@@ -68,23 +88,20 @@ const App = () => {
         return;
       }
 
-      // Chuyển đổi `selectedDateTime` thành chuỗi ISO để truyền vào bookingTime
       const bookingTime = selectedDateTime.toISOString();
 
-      // Kiểm tra xem `userId` có tồn tại trước khi gọi API
       if (!user?._id) {
         message.warning("Không tìm thấy thông tin người dùng.");
         return;
       }
 
-      // Gọi API với `userId`
       const data = await getAllStaffByServiceId(
         selectedService,
         bookingTime,
         user._id
       );
       setStaffList(data || []);
-      setCurrent(current + 1); // Tiếp tục sang bước tiếp theo
+      setCurrent(current + 1);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách nhân viên:", error);
       message.error("Không thể tải danh sách nhân viên.");
@@ -92,9 +109,9 @@ const App = () => {
   };
 
   const handleCityChange = async (cityCode) => {
-    setSelectedCity(cityCode); // Lưu mã thành phố
+    setSelectedCity(cityCode);
     const city = cities.find((c) => c.value === cityCode);
-    setSelectedCityName(city?.label || ""); // Lưu tên thành phố
+    setSelectedCityName(city?.label || "");
     try {
       const districtsData = await fetchDistrictsByProvince(cityCode);
       setDistricts(districtsData);
@@ -110,9 +127,9 @@ const App = () => {
   };
 
   const handleDistrictChange = async (districtCode) => {
-    setSelectedDistrict(districtCode); // Lưu mã quận/huyện
+    setSelectedDistrict(districtCode);
     const district = districts.find((d) => d.code === districtCode);
-    setSelectedDistrictName(district?.name || ""); // Lưu tên quận/huyện
+    setSelectedDistrictName(district?.name || "");
     try {
       const wardsData = await fetchWardsByDistrict(districtCode);
       setWards(wardsData);
@@ -125,9 +142,9 @@ const App = () => {
   };
 
   const handleWardChange = (wardCode) => {
-    setSelectedWard(wardCode); // Lưu mã phường/xã
+    setSelectedWard(wardCode);
     const ward = wards.find((w) => w.code === wardCode);
-    setSelectedWardName(ward?.name || ""); // Lưu tên phường/xã
+    setSelectedWardName(ward?.name || "");
   };
 
   const handleBookingSubmit = async () => {

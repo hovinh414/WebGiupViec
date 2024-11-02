@@ -19,7 +19,7 @@ function Employee() {
     agreeToContact: false,
     cvFile: null, // Lưu file CV tải lên
   });
-
+  const [errors, setErrors] = useState({});
   useEffect(() => {
     const fetchServices = async () => {
       const data = await getAllServices(1, 50);
@@ -74,31 +74,60 @@ function Employee() {
       message.error("Chỉ chấp nhận các file pdf, doc, docx, jpg, jpeg, png.");
     }
   };
+  const validateForm = () => {
+    let validationErrors = {};
+
+    if (!formData.fullname.trim()) {
+      validationErrors.fullname = "Vui lòng nhập họ tên.";
+    }
+    if (!formData.phone.trim()) {
+      validationErrors.phone = "Vui lòng nhập số điện thoại.";
+    } else if (!/^\d{10,11}$/.test(formData.phone)) {
+      validationErrors.phone = "Số điện thoại không hợp lệ.";
+    }
+    if (!formData.email.trim()) {
+      validationErrors.email = "Vui lòng nhập email.";
+    } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email)) {
+      validationErrors.email = "Email không hợp lệ.";
+    }
+    if (!formData.age.trim()) {
+      validationErrors.age = "Vui lòng nhập tuổi.";
+    } else if (
+      !/^\d+$/.test(formData.age) ||
+      formData.age < 18 ||
+      formData.age > 65
+    ) {
+      validationErrors.age = "Tuổi không hợp lệ (18-65).";
+    }
+    if (formData.serviceIds.length === 0) {
+      validationErrors.serviceIds = "Vui lòng chọn ít nhất một dịch vụ.";
+    }
+    if (!formData.address.trim()) {
+      validationErrors.address = "Vui lòng chọn thành phố.";
+    }
+    if (!formData.cvFile) {
+      validationErrors.cvFile = "Vui lòng tải lên CV.";
+    }
+
+    setErrors(validationErrors);
+    return Object.keys(validationErrors).length === 0;
+  };
 
   const handleRegister = async () => {
-    const { fullname, phone, email, age, serviceIds, address, cvFile } =
-      formData;
-
-    if (
-      !fullname ||
-      !phone ||
-      !email ||
-      !age ||
-      serviceIds.length === 0 ||
-      !address
-    ) {
-      message.error("Vui lòng điền đầy đủ thông tin.");
+    if (!validateForm()) {
       return;
     }
 
     const formDataToSend = new FormData();
-    formDataToSend.append("name", fullname);
-    formDataToSend.append("phone", phone);
-    formDataToSend.append("email", email);
-    formDataToSend.append("age", age);
-    formDataToSend.append("address", address);
-    formDataToSend.append("cv", cvFile);
-    serviceIds.forEach((id) => formDataToSend.append("serviceIds", id));
+    formDataToSend.append("name", formData.fullname);
+    formDataToSend.append("phone", formData.phone);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("age", formData.age);
+    formDataToSend.append("address", formData.address);
+    formDataToSend.append("cv", formData.cvFile);
+    formData.serviceIds.forEach((id) =>
+      formDataToSend.append("serviceIds", id)
+    );
 
     try {
       const response = await registerStaff(formDataToSend);
@@ -198,49 +227,71 @@ function Employee() {
         <label>Họ tên</label>
         <Input
           name="fullname"
-          style={{ marginBottom: "15px", borderRadius: "4px", height: "40px" }}
+          style={{ borderRadius: "4px", height: "40px" }}
           placeholder="Nhập họ tên"
           value={formData.fullname}
           onChange={handleInputChange}
         />
+        {errors.fullname && (
+          <p style={{ marginBottom: "15px", color: "red" }}>
+            {errors.fullname}
+          </p>
+        )}
         <label>Số điện thoại</label>
         <Input
           name="phone"
-          style={{ marginBottom: "15px", borderRadius: "4px", height: "40px" }}
+          style={{ borderRadius: "4px", height: "40px" }}
           placeholder="Nhập số điện thoại"
           value={formData.phone}
           onChange={handleInputChange}
         />
+        {errors.phone && (
+          <p style={{ marginBottom: "15px", color: "red" }}>{errors.phone}</p>
+        )}
+
         <label>Email</label>
         <Input
           name="email"
-          style={{ marginBottom: "15px", borderRadius: "4px", height: "40px" }}
+          style={{ borderRadius: "4px", height: "40px" }}
           placeholder="Nhập email"
           value={formData.email}
           onChange={handleInputChange}
         />
+        {errors.email && (
+          <p style={{ marginBottom: "15px", color: "red" }}>{errors.email}</p>
+        )}
+
         <label>Tuổi</label>
         <Input
           name="age"
-          style={{ marginBottom: "15px", borderRadius: "4px", height: "40px" }}
+          type="number"
+          style={{ borderRadius: "4px", height: "40px" }}
           placeholder="Nhập tuổi"
           value={formData.age}
           onChange={handleInputChange}
         />
+        {errors.age && (
+          <p style={{ marginBottom: "15px", color: "red" }}>{errors.age}</p>
+        )}
         <label>Dịch vụ đăng ký</label>
         <Select
           mode="multiple"
           placeholder="Chọn dịch vụ"
           options={services}
-          style={{ width: "100%", marginBottom: "15px" }} // Giữ chiều cao mặc định của Select
+          style={{ width: "100%" }} // Giữ chiều cao mặc định của Select
           value={formData.serviceIds}
           onChange={(value) => handleSelectChange(value, "serviceIds")}
         />
+        {errors.serviceIds && (
+          <p style={{ marginBottom: "15px", color: "red" }}>
+            {errors.serviceIds}
+          </p>
+        )}
         <label>Thành phố đăng ký</label>
         <Select
           showSearch
           placeholder="Chọn thành phố"
-          style={{ width: "100%", marginBottom: "15px", height: "40px" }}
+          style={{ width: "100%", height: "40px" }}
           options={[
             { value: "Hà Nội", label: "Hà Nội" },
             { value: "Đà Nẵng", label: "Đà Nẵng" },
@@ -249,13 +300,19 @@ function Employee() {
           value={formData.address}
           onChange={(value) => handleSelectChange(value, "address")}
         />
+        {errors.address && (
+          <p style={{ marginBottom: "15px", color: "red" }}>{errors.address}</p>
+        )}
         <label>Upload CV</label>
         <Input
           type="file"
           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
           onChange={handleFileChange}
-          style={{ marginBottom: "15px", borderRadius: "4px", height: "40px" }}
+          style={{ borderRadius: "4px", height: "40px" }}
         />
+        {errors.cvFile && (
+          <p style={{ marginBottom: "15px", color: "red" }}>{errors.cvFile}</p>
+        )}
         <div style={{ margin: "15px 0" }}>
           <input
             type="checkbox"

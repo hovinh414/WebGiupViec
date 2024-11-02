@@ -65,131 +65,136 @@ function ListService() {
 
   return (
     <div
-      className="main-form"
-      style={{ display: "flex", gap: "20px", padding: "0 40px" }}
+      className="container"
+      style={{ marginTop: "20px", marginBottom: "20px" }}
     >
-      {/* SideBar */}
-      <div className="sidebar" style={{ width: "20%" }}>
-        <h3 style={{ fontWeight: "bold", fontSize: "18px", color: "#333" }}>
-          Các loại dịch vụ
-        </h3>
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          <li
-            style={{
-              padding: "10px 0",
-              cursor: "pointer",
-              fontWeight: selectedCategory ? "normal" : "bold",
-            }}
-            onClick={() => handleCategorySelect("")}
-          >
-            Tất cả dịch vụ
-          </li>
-          {categories.map((category) => (
+      <div
+        className="main-form"
+        style={{ display: "flex", gap: "20px", padding: "0 40px" }}
+      >
+        {/* SideBar */}
+        <div className="sidebar" style={{ width: "20%" }}>
+          <h3 style={{ fontWeight: "bold", fontSize: "18px", color: "#333" }}>
+            Các loại dịch vụ
+          </h3>
+          <ul style={{ listStyle: "none", padding: 0 }}>
             <li
-              key={category._id}
               style={{
                 padding: "10px 0",
                 cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
+                fontWeight: selectedCategory ? "normal" : "bold",
               }}
-              onClick={() => handleCategorySelect(category._id)}
+              onClick={() => handleCategorySelect("")}
             >
-              <img
-                src={category.images}
-                alt={category.categoryName}
-                style={{
-                  width: "30px",
-                  height: "30px",
-                  borderRadius: "5px",
-                  marginRight: "10px",
-                }}
-              />
-              <span
-                style={{
-                  fontWeight:
-                    selectedCategory === category._id ? "bold" : "normal",
-                }}
-              >
-                {category.categoryName}
-              </span>
+              Tất cả dịch vụ
             </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Service List */}
-      <div className="service-list" style={{ width: "80%" }}>
-        <h3 style={{ fontWeight: "bold", fontSize: "18px", color: "#333" }}>
-          Danh sách dịch vụ
-        </h3>
-        <List
-          grid={{ gutter: 16, column: 3 }}
-          dataSource={services}
-          renderItem={(service) => {
-            // Kiểm tra dựa trên service._id để chỉ đổi màu cho từng mục
-            const isInWishlist = wishlist.some(
-              (item) => item._id === service._id
-            );
-            return (
-              <List.Item key={service._id}>
-                <Card
-                  hoverable
-                  cover={
-                    <img
-                      alt={service.serviceName}
-                      src={service.images ? service.images[0] : ""}
-                      style={{ height: "180px", objectFit: "cover" }}
-                    />
-                  }
-                  actions={[
-                    <Button
-                      type="primary"
-                      style={{
-                        backgroundColor: "#FF6F3C",
-                        borderColor: "#FF6F3C",
-                      }}
-                      onClick={() =>
-                        navigate("/hourly", { state: { service } })
-                      }
-                    >
-                      Chi tiết dịch vụ
-                    </Button>,
-                    <FontAwesomeIcon
-                      icon={isInWishlist ? faSolidHeart : faRegularHeart}
-                      onClick={() => handleAddToWishlist(service)}
-                      style={{
-                        cursor: "pointer",
-                        color: isInWishlist ? "#FF6F3C" : "gray",
-                        fontSize: "24px", // Tăng kích thước lên
-                      }}
-                    />,
-                  ]}
+            {categories.map((category) => (
+              <li
+                key={category._id}
+                style={{
+                  padding: "10px 0",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                onClick={() => handleCategorySelect(category._id)}
+              >
+                <img
+                  src={category.images}
+                  alt={category.categoryName}
+                  style={{
+                    width: "30px",
+                    height: "30px",
+                    borderRadius: "5px",
+                    marginRight: "10px",
+                  }}
+                />
+                <span
+                  style={{
+                    fontWeight:
+                      selectedCategory === category._id ? "bold" : "normal",
+                  }}
                 >
-                  <Meta
-                    title={service.serviceName}
-                    description={
-                      <>
-                        <p>{service.shortDescription}</p>
-                        <p style={{ color: "#FF6F3C", fontWeight: "bold" }}>
-                          Giá dự tính: {formatCurrency(service.basePrice)}
-                        </p>
-                      </>
-                    }
-                  />
-                </Card>
-              </List.Item>
-            );
-          }}
-        />
+                  {category.categoryName}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-        <Pagination
-          current={currentPage}
-          pageSize={pageSize}
-          total={totalServices}
-          onChange={handlePageChange}
-          style={{ textAlign: "center", marginTop: "20px" }}
-        />
+        {/* Service List */}
+        <div className="service-list" style={{ width: "80%" }}>
+          <h3 style={{ fontWeight: "bold", fontSize: "18px", color: "#333" }}>
+            Danh sách dịch vụ
+          </h3>
+          <List
+            grid={{ gutter: 16, column: 3 }}
+            dataSource={services}
+            renderItem={(service) => {
+              // Kiểm tra dựa trên service._id để chỉ đổi màu cho từng mục
+              const isInWishlist = wishlist.some(
+                (item) => item._id === service._id
+              );
+              return (
+                <List.Item key={service._id}>
+                  <Card
+                    hoverable
+                    cover={
+                      <img
+                        alt={service.serviceName}
+                        src={service.images ? service.images[0] : ""}
+                        style={{ height: "180px", objectFit: "cover" }}
+                      />
+                    }
+                    actions={[
+                      <Button
+                        type="primary"
+                        style={{
+                          backgroundColor: "#FF6F3C",
+                          borderColor: "#FF6F3C",
+                        }}
+                        onClick={() =>
+                          navigate("/hourly", { state: { service } })
+                        }
+                      >
+                        Chi tiết dịch vụ
+                      </Button>,
+                      <FontAwesomeIcon
+                        icon={isInWishlist ? faSolidHeart : faRegularHeart}
+                        onClick={() => handleAddToWishlist(service)}
+                        style={{
+                          cursor: "pointer",
+                          color: isInWishlist ? "#FF6F3C" : "gray",
+                          fontSize: "24px", // Tăng kích thước lên
+                        }}
+                      />,
+                    ]}
+                  >
+                    <Meta
+                      title={service.serviceName}
+                      description={
+                        <>
+                          <p>{service.shortDescription}</p>
+                          <p style={{ color: "#FF6F3C", fontWeight: "bold" }}>
+                            Giá dự tính: {formatCurrency(service.basePrice)}
+                          </p>
+                        </>
+                      }
+                    />
+                  </Card>
+                </List.Item>
+              );
+            }}
+          />
+
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={totalServices}
+            onChange={handlePageChange}
+            style={{ textAlign: "center", marginTop: "20px" }}
+          />
+        </div>
       </div>
     </div>
   );

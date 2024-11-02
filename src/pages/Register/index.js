@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Input, message } from "antd";
+import { Input, message, Select } from "antd";
 import { signUp } from "../../services/authService";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 
 const initFormValue = {
   name: "",
@@ -19,7 +19,7 @@ const isEmailValid = (email) =>
 function Register() {
   const [formValue, setFormValue] = useState(initFormValue);
   const [formError, setFormError] = useState({});
-  const navigate = useNavigate(); // Sử dụng useNavigate
+  const navigate = useNavigate();
 
   const validateForm = () => {
     const error = {};
@@ -56,6 +56,11 @@ function Register() {
     setFormValue({ ...formValue, [name]: value });
   };
 
+  const handleSelectChange = (value) => {
+    setFormValue({ ...formValue, address: value });
+    setFormError({ ...formError, address: "" });
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateForm()) {
@@ -77,7 +82,7 @@ function Register() {
         }
         message.success("Đăng ký thành công!");
         setFormValue(initFormValue);
-        navigate("/login"); // Chuyển hướng sang trang đăng nhập
+        navigate("/login");
       } catch (err) {
         console.error(err);
       }
@@ -94,6 +99,7 @@ function Register() {
         alignItems: "center",
         minHeight: "100vh",
         backgroundColor: "#f0f2f5",
+        padding: "25px",
       }}
     >
       <div
@@ -117,7 +123,7 @@ function Register() {
           Đăng Ký Tài Khoản
         </h1>
         <form onSubmit={handleSubmit}>
-          {["name", "email", "address", "phone"].map((field) => (
+          {["name", "email", "phone"].map((field) => (
             <div style={{ marginBottom: "15px" }} key={field}>
               <label
                 htmlFor={field}
@@ -131,8 +137,6 @@ function Register() {
                   ? "Họ và Tên"
                   : field === "email"
                   ? "Email"
-                  : field === "address"
-                  ? "Địa chỉ"
                   : "Số điện thoại"}
               </label>
               <Input
@@ -143,8 +147,6 @@ function Register() {
                     ? "Nhập họ và tên của bạn"
                     : field === "email"
                     ? "Nhập email của bạn"
-                    : field === "address"
-                    ? "Nhập địa chỉ của bạn"
                     : "Nhập số điện thoại của bạn"
                 }
                 value={formValue[field]}
@@ -164,6 +166,47 @@ function Register() {
               )}
             </div>
           ))}
+
+          {/* Địa chỉ - Select field */}
+          <div style={{ marginBottom: "15px" }}>
+            <label
+              htmlFor="address"
+              style={{
+                display: "block",
+                fontWeight: "bold",
+                marginBottom: "5px",
+              }}
+            >
+              Địa chỉ
+            </label>
+            <Select
+              id="address"
+              placeholder="Chọn địa chỉ"
+              value={formValue.address}
+              onChange={handleSelectChange}
+              style={{ width: "100%", height: "40px" }}
+              options={[
+                { value: "Hà Nội", label: "Hà Nội" },
+                { value: "Đà Nẵng", label: "Đà Nẵng" },
+                {
+                  value: "Thành phố Hồ Chí Minh",
+                  label: "Thành phố Hồ Chí Minh",
+                },
+              ]}
+            />
+            {formError.address && (
+              <div
+                style={{
+                  color: "#ff4d4f",
+                  fontSize: "12px",
+                  marginTop: "5px",
+                }}
+              >
+                {formError.address}
+              </div>
+            )}
+          </div>
+
           {["password", "confirmPassword"].map((field) => (
             <div style={{ marginBottom: "15px" }} key={field}>
               <label

@@ -1,73 +1,76 @@
-import React, { useEffect } from "react";
-import "./index.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFacebookF,
-  faInstagram,
-  faTiktok,
-} from "@fortawesome/free-brands-svg-icons";
-import {
-  faGlobe,
-  faHeadphones,
-  faEnvelope,
-  faHeart,
-} from "@fortawesome/free-solid-svg-icons";
-import { faComment } from "@fortawesome/free-regular-svg-icons";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import React, { useState, useEffect } from "react";
+import { Button, message } from "antd";
+import { MessageOutlined } from "@ant-design/icons";
+import Banner from "./Banner/Banner";
+import Advantages from "./Advantages/Advantages";
+import HomeAds1 from "./Ads/HomeAds1";
+import Categories from "./Categories/Categories";
+import HomeAds2 from "./Ads/HomeAds2";
+import { useNavigate } from "react-router-dom";
 import SampleSlider from "./SampleSlider";
 import Procedure from "./Procedure";
-import sliderHome from "../../image/slider2.jpg";
-import appstore from "../../image/appstore.png";
-import googlePlay from "../../image/google_play.png";
+import "./index.css";
 
-function Home() {
-  // Scroll to the top when the component is rendered
+const Home = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   return (
-    <div className="Homep">
-      {/* header */}
-
-      {/* slider */}
-      <div className="sliderList">
-        <img
-          src={sliderHome}
-          alt="slider trang chu"
-          className="sliderItem"
-        ></img>
-      </div>
-
-      {/* slider service */}
-      <div>
-        <div className="noti__service">
-          <h1>Các tiện ích nổi bật</h1>
-        </div>
-
-        <div>
+    <div className="home-content">
+      <div className="main">
+        <Banner />
+        <Advantages />
+        <HomeAds1 />
+        <Categories />
+        <div className="container">
+          <div className="top-categories-list">
+            <div className="row">
+              <div className="col-12">
+                <div className="section-title">
+                  <h4>Các tiện ích nổi bật</h4>
+                </div>
+              </div>
+            </div>
+          </div>
           <SampleSlider />
         </div>
-      </div>
-      {/* procedure */}
-      <Procedure />
-      {/* startUse */}
-      <div className="startList">
-        <div className="startDes">
-          <h3 className="startName">Trải nghiệm ngay hôm nay</h3>
-          <h3 className="startDescription">
-            Bạn đã sẵn sàng sử dụng dịch vụ của We shine chưa? Bắt đầu ngay với
-            việc đặt lịch đầu tiên của bạn
-          </h3>
+
+        <HomeAds2 />
+        <Procedure />
+        {/* startUse */}
+        <div className="startList">
+          <div className="startDes">
+            <h3 className="startName">Trải nghiệm ngay hôm nay</h3>
+            <h3 className="startDescription">
+              Bạn đã sẵn sàng sử dụng dịch vụ của We shine chưa? Bắt đầu ngay
+              với việc đặt lịch đầu tiên của bạn
+            </h3>
+          </div>
+          <a href="/service" className="startButton">
+            Trải nghiệm dịch vụ
+          </a>
         </div>
-        <a href="/service" className="startButton">
-          Trải nghiệm dịch vụ
-        </a>
       </div>
-      {/* footer */}
     </div>
   );
-}
+};
+
+const styles = {
+  chatButton: {
+    position: "fixed",
+    bottom: "50px",
+    right: "90px",
+    zIndex: 1000,
+    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+    color: "#ffffff",
+    backgroundColor: "#d91f28",
+    width: "50px",
+    height: "50px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+};
 
 export default Home;

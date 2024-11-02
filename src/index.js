@@ -1,10 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import "jquery"; // Ensure jQuery is loaded first
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./scss/style.scss";
+import reportWebVitals from "./reportWebVitals";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+// Make jQuery globally available for Owl Carousel
+import $ from "jquery";
+window.$ = window.jQuery = $;
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <App />
