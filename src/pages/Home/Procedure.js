@@ -127,7 +127,7 @@ function Procedure() {
               Chọn thời gian và địa điểm
             </h3>
             <p style={{ fontSize: "16px", color: "#666", margin: 0 }}>
-              Xác định ngày, giờ và địa điểm để đặt dịch vụ bTaskee nhanh chóng.
+              Xác định ngày, giờ và địa điểm để đặt dịch vụ WeShine nhanh chóng.
             </p>
           </div>
         </li>

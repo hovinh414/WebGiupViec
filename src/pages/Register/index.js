@@ -23,6 +23,7 @@ function Register() {
 
   const validateForm = () => {
     const error = {};
+    const vietnamPhoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})$/;
 
     if (isEmptyValue(formValue.name)) {
       error["name"] = "Tên là bắt buộc";
@@ -37,7 +38,10 @@ function Register() {
     }
     if (isEmptyValue(formValue.phone)) {
       error["phone"] = "Số điện thoại là bắt buộc";
+    } else if (!vietnamPhoneRegex.test(formValue.phone)) {
+      error["phone"] = "Số điện thoại không đúng định dạng";
     }
+
     if (isEmptyValue(formValue.password)) {
       error["password"] = "Mật khẩu là bắt buộc";
     }

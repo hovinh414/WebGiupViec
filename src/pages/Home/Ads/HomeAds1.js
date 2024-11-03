@@ -13,7 +13,7 @@ const HomeAds1 = () => {
     },
     {
       id: 3,
-      img: "https://cohoi.tuoitre.vn/upload/lib_item/301222_btaskee1_1.jpg",
+      img: "https://www.btaskee.com/wp-content/uploads/2020/11/home-cleaning-banner-ver-25.jpg",
     },
   ];
 

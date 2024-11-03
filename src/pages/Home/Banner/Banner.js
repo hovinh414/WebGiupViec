@@ -1,16 +1,19 @@
 import React from "react";
 import Slider from "./Slider";
 import { Link } from "react-router-dom";
+import Banner3 from "../../../image/banner3.jpg"
+import Banner1 from "../../../image/banner1.jpg"
+
 
 const Banner = () => {
   const BannerRightData = [
     {
       id: 1,
-      img: "https://i.ytimg.com/vi/5C7pekvoy7A/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAY9z4q34r5QwwkxfJ0Y8i6VSpWWQ",
+      img: Banner3,
     },
     {
       id: 2,
-      img: "https://cdn2.fptshop.com.vn/unsafe/Uploads/images/tin-tuc/178337/Originals/Btaskee-3.jpg",
+      img: Banner1,
     },
   ];
 

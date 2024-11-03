@@ -95,12 +95,6 @@ const Header = () => {
                   : "nav-links-wrapper"
               }
             >
-              <div className="title">
-                <h6>MENU</h6>
-                <button type="button" onClick={handleCloseMenu}>
-                  ✕
-                </button>
-              </div>
               <ul className="d-flex">
                 {NavLinksData.map((link) =>
                   link.id === 1 ? (
