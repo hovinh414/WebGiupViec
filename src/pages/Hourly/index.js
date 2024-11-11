@@ -257,6 +257,25 @@ function Hourly() {
                       {feedback.customerId.name} -{" "}
                       {formatPhoneNumber(feedback.customerId.phone)}
                     </h4>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "2px",
+                      }}
+                    >
+                      {Array.from({ length: 5 }, (_, i) => (
+                        <span
+                          key={i}
+                          style={{
+                            color: i < feedback.rating ? "#FFD700" : "#e0e0e0", // Màu vàng cho sao được chọn, xám cho sao không chọn
+                            fontSize: "16px",
+                          }}
+                        >
+                          ★
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
                 <p

@@ -50,11 +50,14 @@ export const changePassword = async (userId, passwords) => {
 export const getAllStaffByServiceId = async (
   serviceId,
   bookingTime,
-  userId
+  userId,
+  address
 ) => {
   try {
     const response = await axios.get(
-      `${API_URL}/user/staff/service/${serviceId}?bookingTime=${bookingTime}&userId=${userId}`,
+      `${API_URL}/user/staff/service/${serviceId}?bookingTime=${bookingTime}&userId=${userId}&address=${encodeURIComponent(
+        address
+      )}`,
       authHeader()
     );
     return response.data.payload;

@@ -24,7 +24,6 @@ const App = () => {
   const [selectedStaff, setSelectedStaff] = useState(null);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
-  const [cities, setCities] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedCityName, setSelectedCityName] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState(null);
@@ -38,11 +37,11 @@ const App = () => {
   const user = useSelector((state) => state.user.userInfo);
   const navigate = useNavigate();
 
-  const cityOptions = {
-    "Hà Nội": { value: "01", label: "Hà Nội" },
-    "Đà Nẵng": { value: "48", label: "Đà Nẵng" },
-    "Thành phố Hồ Chí Minh": { value: "79", label: "Thành phố Hồ Chí Minh" },
-  };
+  const cities = [
+    { value: "01", label: "Hà Nội" },
+    { value: "48", label: "Đà Nẵng" },
+    { value: "79", label: "Hồ Chí Minh" },
+  ];
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -56,29 +55,10 @@ const App = () => {
     };
     fetchServices();
   }, [serviceId]);
-  useEffect(() => {
-    if (selectedService) {
-      const selectedServiceData = services.find(
-        (service) => service._id === selectedService
-      );
-
-      if (selectedServiceData && selectedServiceData.address) {
-        const serviceCity = cityOptions[selectedServiceData.address];
-        if (serviceCity) {
-          setCities([serviceCity]);
-          setSelectedCity(serviceCity.value);
-          setSelectedCityName(serviceCity.label);
-        } else {
-          message.warning("Tỉnh của dịch vụ không khả dụng.");
-          setCities([]);
-          setSelectedCity(null);
-        }
-      }
-    }
-  }, [selectedService, services]);
 
   const handleServiceChange = (serviceId) => {
     setSelectedService(serviceId);
+    setSelectedStaff(null);
   };
 
   const handleFetchStaff = async () => {
@@ -87,7 +67,7 @@ const App = () => {
         message.warning("Vui lòng chọn thời gian trước khi tiếp tục.");
         return;
       }
-
+      console.log(selectedCityName);
       const bookingTime = selectedDateTime.toISOString();
 
       if (!user?._id) {
@@ -98,7 +78,8 @@ const App = () => {
       const data = await getAllStaffByServiceId(
         selectedService,
         bookingTime,
-        user._id
+        user._id,
+        selectedCityName
       );
       setStaffList(data || []);
       setCurrent(current + 1);
